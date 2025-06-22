@@ -7,15 +7,15 @@ function Header() {
   const { profileData } = useProfile()
   const goal = profileData?.goal
   const target = profileData?.target
-  const currentWeight = 61
+  const currentWeight = profileData?.weight
   const startWeight = profileData?.weight
 
   let progress = 0
-  if (goal === 'gain' && target) {
+  if (goal === 'gain' && target && currentWeight) {
     progress = Math.round((currentWeight * 100) / target)
   }
 
-  if (goal === 'loss' && startWeight && target ) {
+  if (goal === 'loss' && startWeight && target && currentWeight ) {
     const lossTotal = startWeight - target
     const lossAchieved = startWeight - currentWeight
     progress = Math.round((lossAchieved * 100) / lossTotal)

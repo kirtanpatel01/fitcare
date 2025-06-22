@@ -27,9 +27,9 @@ export async function saveOnboardingData(req, res) {
 
     let bmr;
     if(body.gender === 'male') {
-      bmr = 10 * body.weight + 6.25 * body.height - 5 * age + 5
+      bmr = 10 * body.weight + 6.25 * body.height - 5 * body.age + 5
     } else if(body.gender === 'female') {
-      bmr = 10 * body.weight + 6.25 * body.height - 5 * age - 161      
+      bmr = 10 * body.weight + 6.25 * body.height - 5 * body.age - 161      
     }
 
     const tdee = bmr * activityMultipliers[body.activity]
