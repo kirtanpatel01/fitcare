@@ -21,8 +21,7 @@ function BodyInfo() {
           placeholder="Height"
         />
         <Select
-          value={form.hUnit ?? ""} 
-          defaultValue="cm"
+          value={form.hUnit ?? "cm"}
           onValueChange={(val: "cm" | "m" | "ft" | "in") => updateForm({ hUnit: val })}
         >
           <SelectTrigger className="w-[70px]">
@@ -50,8 +49,7 @@ function BodyInfo() {
           placeholder="Weight"
         />
         <Select
-          defaultValue="kg"
-          value={form.wUnit ?? ''}
+          value={form.wUnit ?? 'kg'}
           onValueChange={(val: "kg" | "g" | "lbs") => updateForm({ wUnit: val })}
         >
           <SelectTrigger className="w-[70px]">
@@ -66,13 +64,13 @@ function BodyInfo() {
       </div>
 
       <div className="border rounded-md p-3 space-y-3">
-        <Label>What you wamt ?</Label>
+        <Label>What's your goal ?</Label>
         <RadioGroup
           className="flex ml-1"
           value={form.goal ?? ""}
-          onValueChange={(value: "gain" | "loss") => updateForm({ goal: value })}
+          onValueChange={(value: "gain" | "loss" | "maintain") => updateForm({ goal: value })}
         >
-          {["Gain", "Loss"].map((type) => (
+          {["Gain", "Loss", "Maintain"].map((type) => (
             <div key={type} className="flex items-center gap-2">
               <RadioGroupItem value={type.toLowerCase()} id={type} />
               <Label htmlFor={type}>{type}</Label>
@@ -81,33 +79,49 @@ function BodyInfo() {
         </RadioGroup>
       </div>
 
-      <div className="flex gap-2">
-        <Input
-          type="number"
-          name="target"
-          value={form.target ?? ""} // fallback to empty string if undefined
-          onChange={(e) => {
-            const val = e.target.value
-            updateForm({ target: val === "" ? undefined : +val })
-          }}
-          className="max-w-24"
-          placeholder="Target"
-        />
-        <Select
-          defaultValue="kg"
-          value={form.tUnit ?? ""}
-          onValueChange={(val: "kg" | "g" | "lbs") => updateForm({ tUnit: val })}
-        >
-          <SelectTrigger className="w-[70px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="kg">kg</SelectItem>
-            <SelectItem value="g">g</SelectItem>
-            <SelectItem value="lbs">lbs</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {form.goal !== "maintain" &&
+        (<>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              name="target"
+              value={form.target ?? ""} // fallback to empty string if undefined
+              onChange={(e) => {
+                const val = e.target.value
+                updateForm({ target: val === "" ? undefined : +val })
+              }}
+              className="max-w-24"
+              placeholder="Target"
+            />
+            <Select
+              value={form.tUnit ?? "kg"}
+              onValueChange={(val: "kg" | "g" | "lbs") => updateForm({ tUnit: val })}
+            >
+              <SelectTrigger className="w-[70px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="kg">kg</SelectItem>
+                <SelectItem value="g">g</SelectItem>
+                <SelectItem value="lbs">lbs</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label>In how many days you want achieve the target ?</Label>
+            <Input
+              type="number"
+              name="targetDays"
+              value={form.targetDays ?? ""} // fallback to empty string if undefined
+              onChange={(e) => {
+                const val = e.target.value
+                updateForm({ targetDays: val === "" ? undefined : +val })
+              }}
+              className="max-w-32"
+              placeholder="Target Days"
+            />
+          </div>
+        </>)}
     </div>
   )
 }

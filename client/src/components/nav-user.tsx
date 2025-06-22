@@ -1,6 +1,5 @@
 import { LogOut, User2 } from "lucide-react"
-import { SidebarMenu, SidebarMenuItem } from "./ui/sidebar"
-import { Button } from "./ui/button"
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar"
 import { Link, useNavigate } from "react-router-dom"
 import api from "@/lib/api"
 import { toast } from "sonner"
@@ -36,21 +35,20 @@ function NavUser() {
       <SidebarMenu>
         <SidebarMenuItem>
           <Link to={'/profile'}>
-            <Button variant={'outline'} className="w-full cursor-pointer">
+            <SidebarMenuButton className="w-full cursor-pointer">
               <User2 />
               {user && user?.name}
-            </Button>
+            </SidebarMenuButton>
           </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <Button 
-            variant={'destructive'} 
-            onClick={handleLogout} 
+          <SidebarMenuButton
+            onClick={handleLogout}
             disabled={isLoggingOut}
             className="w-full cursor-pointer">
             <LogOut />
             Logout
-          </Button>
+          </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
     </div>

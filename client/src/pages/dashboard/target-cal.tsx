@@ -14,14 +14,11 @@ import {
 } from '@/components/ui/card'
 import { type ChartConfig, ChartContainer } from '@/components/ui/chart'
 import { Separator } from "@/components/ui/separator"
-const chartData = [
-  { browser: "safari", visitors: 1260, fill: "var(--color-safari)" },
-]
+import { useProfile } from "@/context/ProfileContext"
 
 const chartConfig = {
   visitors: {
     label: "Visitors",
-    // color: "hsl(var(--chart-1))",
   },
   safari: {
     label: "Safari",
@@ -30,6 +27,11 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function TargetCal() {
+  const { profileData } = useProfile()
+  const target = profileData?.targetCalories ?? 0
+  const chartData = [
+    { browser: "safari", visitors: target, fill: "var(--color-chart-2)" },
+  ]
   return (
     <Card>
       <CardHeader>
@@ -43,7 +45,8 @@ export default function TargetCal() {
         >
           <RadialBarChart
             data={chartData}
-            endAngle={100}
+            startAngle={0}
+            endAngle={250}
             innerRadius={80}
             outerRadius={140}
           >
@@ -54,7 +57,7 @@ export default function TargetCal() {
               className="first:fill-muted last:fill-background"
               polarRadius={[86, 74]}
             />
-            <RadialBar dataKey="visitors" background />
+            <RadialBar dataKey="visitors" background cornerRadius={0} />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -78,7 +81,7 @@ export default function TargetCal() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Cal
                         </tspan>
                       </text>
                     )

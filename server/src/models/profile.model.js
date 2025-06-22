@@ -15,10 +15,14 @@ const profileSchema = new Schema({
   wUnit: String,
   goal: String,
   target: Number,
+  targetDays: Number,
   tUnit: String,
   activity: String,
   food: String,
-  taste: [String]
+  taste: [String],
+  bmr: Number,
+  tdee: Number,
+  targetCalories: Number
 }, { timestamps: true })
 
 export const Profile = model("Profile", profileSchema)

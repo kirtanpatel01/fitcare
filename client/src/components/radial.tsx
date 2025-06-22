@@ -7,11 +7,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useProfile } from "@/context/ProfileContext"
 
 export const description = "A radial chart with text"
 
 const chartData = [
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-chart-2)" },
 ]
 
 const chartConfig = {
@@ -25,6 +26,8 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function Radial() {
+  const { profileData } = useProfile()
+  console.log(profileData?.targetCalories)
   return (
     <Card>
       <CardHeader>
