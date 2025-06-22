@@ -21,25 +21,25 @@ const chartData = [
 const chartConfig = {
   visitors: {
     label: "Visitors",
-    color: "hsl(var(--chart-1))",
+    // color: "hsl(var(--chart-1))",
   },
   safari: {
     label: "Safari",
-    color: "hsl(var(--chart-3))",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
 export default function TargetCal() {
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
+    <Card>
+      <CardHeader>
         <CardTitle>Radial Chart - Shape</CardTitle>
       </CardHeader>
       <Separator />
-      <CardContent className="flex flex-col sm:flex-row items-center">
+      <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="flex-1 aspect-square"
+          className="flex-1 aspect-square h-auto"
         >
           <RadialBarChart
             data={chartData}
@@ -88,11 +88,6 @@ export default function TargetCal() {
             </PolarRadiusAxis>
           </RadialBarChart>
         </ChartContainer>
-        <div className="flex flex-col items-center gap-6">
-          <span className="w-fit border rounded-md bg-teal-500/10 p-2">Total: 2323 cal</span>
-          <span className="w-fit border rounded-md bg-teal-500/10 p-2">Earned: 2323 cal</span>
-          <span className="w-fit border rounded-md bg-teal-500/10 p-2">Remaining: 2323 cal</span>
-        </div>
       </CardContent>
     </Card>
   )
