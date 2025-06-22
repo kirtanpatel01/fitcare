@@ -52,7 +52,11 @@ export default function LoginPage() {
         toast.success('Logged in successfully.')
         const token = res.data.accessToken
         login(token)
-        navigate('/onboarding')
+        if(res.data.hasOnboarded) {
+          navigate('/dashboard')
+        } else {
+          navigate('/onboarding')
+        }
       }
     } catch (error: any) {
       console.log(error)

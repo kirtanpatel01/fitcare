@@ -33,12 +33,12 @@ function OnboardingPage() {
         if (res.status === 200) {
           setProfileData(res.data.profile)
           setForm(res.data.profile)
-          console.log(res)
+          navigate('/dashboard')
           // toast.success('Profile data fetched.')
         }
       } catch (error: any) {
         console.log("Error while fetching profile data: ", error)
-        toast.error(error.response.data.error)
+        // toast.error(error.response.data.error)
       } finally {
         setIsLoading(false)
       }
@@ -48,8 +48,6 @@ function OnboardingPage() {
   }, [])
 
   if (isLoading) return <div>Loading...</div>
-
-  console.log(profileData)
 
   async function handleSave() {
     try {

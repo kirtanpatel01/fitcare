@@ -41,7 +41,7 @@ export async function loginUser(req, res) {
   if (!isPasswordValid)
     return res.status(409).json({ error: "Incorrect password" });
 
-  const payload = { _id: user._id, email: user.email, name: user.name };
+  const payload = { _id: user._id, email: user.email, name: user.name, hasOnboarded:user?.hasOnboarded };
 
   const accessToken = generateAccessToken(payload);
   const refreshToken = generateRefreshToken(payload);
