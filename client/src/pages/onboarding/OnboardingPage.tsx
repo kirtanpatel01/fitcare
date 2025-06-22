@@ -33,6 +33,7 @@ function OnboardingPage() {
         if (res.status === 200) {
           setProfileData(res.data.profile)
           setForm(res.data.profile)
+          console.log(res)
           // toast.success('Profile data fetched.')
         }
       } catch (error: any) {
