@@ -52,6 +52,7 @@ function OnboardingPage() {
   async function handleSave() {
     try {
       setIsSaving(true)
+      console.log(form)
       const res = await api.post('/profile/onboarding', form)
       if (res.status === 201) {
         toast.success('Profile data saved successfully.')

@@ -10,9 +10,9 @@ const activityMultipliers = {
   ultra: 1.9,
 }
 
-
 export async function saveOnboardingData(req, res) {
   const { body, user } = req;
+  console.log(body)
   try {
     if (!user) {
       return res
@@ -35,7 +35,7 @@ export async function saveOnboardingData(req, res) {
     const tdee = bmr * activityMultipliers[body.activity]
 
     const weightDiff = body.target - body.weight
-    const calorieChange = weightDiff + 7700
+    const calorieChange = weightDiff * 7700
     const dailyCaloriesNeed = calorieChange / body.targetDays
     const targetCalories = tdee + dailyCaloriesNeed
 
@@ -109,7 +109,7 @@ export async function updateProfile(req, res) {
 
     // 3. Calculate Target Calories
     const weightDiff = body.target - body.weight;
-    const calorieChange = weightDiff * 7700; // ❗ multiplication, not addition
+    const calorieChange = weightDiff * 7700;
     const dailyCaloriesNeed = calorieChange / body.targetDays;
     const targetCalories = tdee + dailyCaloriesNeed;
 

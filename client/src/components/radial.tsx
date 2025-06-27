@@ -8,30 +8,45 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useProfile } from "@/context/ProfileContext"
-
-export const description = "A radial chart with text"
-
-const chartData = [
-  { browser: "safari", visitors: 200, fill: "var(--color-chart-2)" },
-]
+import { useCalories } from "@/context/CalorieContex"
+import { Button } from "./ui/button"
+import { RefreshCcw } from "lucide-react"
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
+  morningCal: {
+    label: "Breakfast",
   },
 } satisfies ChartConfig
 
-export function Radial() {
+export function Radial({ time }: { time: string }) {
   const { profileData } = useProfile()
-  console.log(profileData?.targetCalories)
+  const target = Math.round(Number(profileData?.targetCalories ?? 0))
+
+  const { isLoading, calories, refreshCal } = useCalories();
+
+  if (isLoading) return <div>Loading...</div>
+
+  const filteredCal = calories.filter(cal => cal.time === time)
+  const calSum = Math.round(filteredCal.reduce((sum, cal) => sum + cal.cal, 0))
+
+  const chartData = [
+    { timing: "Breakfast", calories: calSum, fill: "var(--color-chart-2)" },
+  ]
+
+  const end = Math.round((calSum * 360) / target)
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Morning:</CardTitle>
+      <CardHeader className="flex items-center justify-between">
+        <CardTitle>{time.charAt(0).toUpperCase()+time.slice(1)}</CardTitle>
+        <Button
+          onClick={refreshCal}
+          size={"icon"}
+          type="button"
+          variant={"outline"}
+          className="cursor-pointer">
+          <RefreshCcw />
+        </Button>
       </CardHeader>
       <Separator />
       <CardContent className="flex flex-col sm:flex-row">
@@ -42,7 +57,7 @@ export function Radial() {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={250}
+            endAngle={end}
             innerRadius={65}
             outerRadius={90}
           >
@@ -53,7 +68,7 @@ export function Radial() {
               className="first:fill-muted last:fill-background"
               polarRadius={[70, 60]}
             />
-            <RadialBar dataKey="visitors" background cornerRadius={10} />
+            <RadialBar dataKey="calories" background cornerRadius={10} />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -70,14 +85,14 @@ export function Radial() {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0].visitors.toLocaleString()}
+                          {chartData[0].calories.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          {target}
                         </tspan>
                       </text>
                     )

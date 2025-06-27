@@ -1,5 +1,4 @@
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-
 import {
   Card,
   CardContent,
@@ -13,17 +12,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { Separator } from "@/components/ui/separator"
-
-export const description = "An area chart with gradient fill"
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+import { useCalories } from "@/context/CalorieContex"
+import { Button } from "@/components/ui/button"
+import { RefreshCcw } from "lucide-react"
+import { format, subDays, eachDayOfInterval } from "date-fns"
 
 const chartConfig = {
   desktop: {
@@ -33,10 +25,37 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function CaloriesReport() {
+  const { isLoading, allCal, refreshAllCal } = useCalories();
+  
+  if (isLoading) return <div>Loading...</div>
+  
+  const past7Days = eachDayOfInterval({
+    start: subDays(new Date(), 6),
+    end: new Date(),
+  });
+
+  const calMap = new Map<string, number>();
+
+  for (const cal of allCal) {
+    const dateStr = format(new Date(cal.createdAt), "dd-MMM");
+    calMap.set(dateStr, (calMap.get(dateStr) || 0) + cal.cal);
+  }
+
+  const chartData = past7Days.map((date) => {
+    const dateStr = format(date, "dd-MMM");
+    return {
+      date: dateStr,
+      cal: calMap.get(dateStr) || 0,
+    };
+  });
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Calories Report:</CardTitle>
+      <CardHeader className="flex items-center justify-between">
+        <CardTitle>Past 7 Days Calories</CardTitle>
+        <Button onClick={refreshAllCal} size="icon" variant="outline" className="cursor-pointer">
+          <RefreshCcw />
+        </Button>
       </CardHeader>
       <Separator />
       <CardContent>
@@ -44,18 +63,14 @@ export function CaloriesReport() {
           <AreaChart
             accessibilityLayer
             data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+            margin={{ left: 12, right: 12 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <defs>
@@ -73,8 +88,8 @@ export function CaloriesReport() {
               </linearGradient>
             </defs>
             <Area
-              dataKey="desktop"
-              type="natural"
+              dataKey="cal"
+              type="monotone"
               fill="url(#fillDesktop)"
               fillOpacity={0.4}
               stroke="var(--color-desktop)"
@@ -84,5 +99,5 @@ export function CaloriesReport() {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

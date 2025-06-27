@@ -41,8 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     decodeUser(token)
   }
 
-
-
   const logout = () => {
     removeToken()
     setAccessToken(null)
