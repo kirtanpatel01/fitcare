@@ -52,10 +52,12 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      console.log(values)
       setIsLoading(true)
       const res = await api.post('/user/login', values)
       if (res.status === 200) {
         toast.success('Logged in successfully.')
+        console.log(res)
         const token = res.data.accessToken
         login(token)
         console.log(res.data)
