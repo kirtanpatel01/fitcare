@@ -33,7 +33,7 @@ function OnboardingPage() {
         if (res.status === 200) {
           setProfileData(res.data.profile)
           setForm(res.data.profile)
-          navigate('/dashboard')
+          // navigate('/dashboard')
           // toast.success('Profile data fetched.')
         }
       } catch (error: any) {

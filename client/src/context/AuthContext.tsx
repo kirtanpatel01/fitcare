@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from "react"
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { getToken, setToken, removeToken } from "@/lib/token"
+import { useFitcareForm } from "@/hooks/use-fitcare-form"
 
 interface AuthContextType {
   user: any
@@ -18,7 +19,6 @@ interface User {
   name: string
   email: string
 }
-
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     removeToken()
     setAccessToken(null)
     setUser(null)
+    useFitcareForm.getState().resetForm();
   }
 
   const silentRefresh = async () => {
@@ -61,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       if (!accessToken) {
+        // setUser(null)
         setLoading(false)
         return
       }
@@ -80,7 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     checkAuth()
-  }, [])
+  }, [accessToken])
 
   const isAuthenticated = !!user
 

@@ -954,17 +954,6 @@ export const calories_data = [
     "qtyUnit": "g"
   },
   {
-    "name": "Khichdi",
-    "state": "Gujarat",
-    "veg": true,
-    "timing": [
-      "lunch"
-    ],
-    "calories": 111,
-    "quantity": 100,
-    "qtyUnit": "g"
-  },
-  {
     "name": "Daliya",
     "state": "Rajasthan",
     "veg": true,

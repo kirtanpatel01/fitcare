@@ -25,6 +25,7 @@ type FitcareStore = {
   prevStep: () => void;
   updateForm: (data: Partial<FitcareFormData>) => void;
   setForm: (data: Partial<FitcareFormData>) => void;
+  resetForm: () => void;
 }
 
 export const useFitcareForm = create<FitcareStore>((set) => ({
@@ -36,4 +37,5 @@ export const useFitcareForm = create<FitcareStore>((set) => ({
     set((s) => ({ form: { ...s.form, ...data } })),
   setForm: (data: Partial<FitcareFormData>) => 
     set(() => ({ form: data })),
+  resetForm: () => set(() => ({ step: 0, form: {} }))
 }))

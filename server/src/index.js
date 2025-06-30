@@ -3,11 +3,11 @@ import { config } from 'dotenv'
 import userRouter from './routes/user.route.js'
 import profileRouter from './routes/profile.route.js'
 import calorieRouter from './routes/calories.route.js'
+import exerciseRouter from './routes/exercise.route.js'
 import { connectDB } from './db/db.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { refreshToken } from './controllers/auth.controller.js'
-import { calories_data } from './utils/data.js'
 
 config()
 
@@ -29,7 +29,8 @@ connectDB(MONGO_URL)
 app.use('/api/user', userRouter)
 app.use('/api/refresh-token', refreshToken)
 app.use('/api/profile', profileRouter)
-app.use('/api/calories', calorieRouter )
+app.use('/api/calories', calorieRouter)
+app.use('/api/exercise', exerciseRouter)
 
 app.get('/', (_, res) => {
   return res.send("Hello from server")

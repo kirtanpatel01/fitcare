@@ -1,6 +1,7 @@
 import api from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext"
 
 interface Profile {
   _id: string;
@@ -19,9 +20,14 @@ interface Profile {
   activity: string;
   food: string;
   taste: string[];
-  bmr: Number,
-  tdee: Number,
-  targetCalories: Number
+  bmr: number;
+  tdee: number;
+  targetCalories: number;
+  protien: number;
+  carbs: number;
+  fat: number;
+  fiber: number;
+  activeDays: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -39,6 +45,7 @@ const ProfileContex = createContext<ProfileContextType>({
 export const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
   const [profileData, setProfileData] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true)
+  const { isAuthenticated, loading } = useAuth()
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -55,10 +62,14 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
       }
     }
 
-    fetchProfileData()
-  }, [])
-
-  if (isLoading) return <div>Loading...</div>
+    // Wait for AuthContext to finish loading and confirm user is authenticated
+    if (!loading && isAuthenticated) {
+      fetchProfileData()
+    } else if (!loading && !isAuthenticated) {
+      // If user is not authenticated, skip fetching
+      setIsLoading(false)
+    }
+  }, [isAuthenticated, loading])
 
   return (
     <ProfileContex.Provider value={{ profileData, isLoading }}>
@@ -69,6 +80,6 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
 
 export const useProfile = () => {
   const context = useContext(ProfileContex)
-  if(!context) throw new Error("useProfile must be used within ProfileProvider")
+  if (!context) throw new Error("useProfile must be used within ProfileProvider")
   return context
 }

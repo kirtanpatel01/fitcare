@@ -28,8 +28,10 @@ const chartConfig = {
 export default function TargetCal() {
   const { profileData } = useProfile()
   const target = Math.round(Number(profileData?.targetCalories ?? 0))
+
   
   const { isLoading, calories, refreshCal } = useCalories();
+  console.log(isLoading, profileData)
   
   if(isLoading) return <div>Loading...</div>
   

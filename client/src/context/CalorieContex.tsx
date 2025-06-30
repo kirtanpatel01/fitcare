@@ -1,6 +1,7 @@
 import api from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "./AuthContext";
 
 interface CalorieType {
   time: string;
@@ -11,7 +12,7 @@ interface AllCalorieType {
   cal: number;
   createdAt: string;
   time: string;
-  updatedAt: string 
+  updatedAt: string
   user: string;
 }
 
@@ -27,15 +28,16 @@ interface CaloriesContextType {
 const CaloriesContex = createContext<CaloriesContextType | undefined>(undefined)
 
 export const CaloriesProvider = ({ children }: { children: React.ReactNode }) => {
-  const [ calories, setCalories ] = useState<CalorieType[]>([]);
-  const [ allCal, setAllCal ] = useState<AllCalorieType[]>([]);
-  const [ isLoading, setIsLoading ] = useState<boolean>(true);
+  const [calories, setCalories] = useState<CalorieType[]>([]);
+  const [allCal, setAllCal] = useState<AllCalorieType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { isAuthenticated, loading } = useAuth()
 
-  const getCalData = async() => {
+  const getCalData = async () => {
     try {
       const res = await api.get("/calories/get");
-      if(res.status === 200) {
-        if(res.data.calories) {
+      if (res.status === 200) {
+        if (res.data.calories) {
           setCalories(res.data.calories)
         }
       }
@@ -47,11 +49,11 @@ export const CaloriesProvider = ({ children }: { children: React.ReactNode }) =>
     }
   }
 
-  const getAllData = async() => {
+  const getAllData = async () => {
     try {
       const res = await api.get("/calories/get-all");
-      if(res.status === 200) {
-        if(res.data.calories) {
+      if (res.status === 200) {
+        if (res.data.calories) {
           setAllCal(res.data.calories)
         }
       }
@@ -64,27 +66,33 @@ export const CaloriesProvider = ({ children }: { children: React.ReactNode }) =>
   }
 
   useEffect(() => {
-    getCalData()
-    getAllData()
-  }, [])
+    // Wait for AuthContext to finish loading and confirm user is authenticated
+    if (!loading && isAuthenticated) {
+      getCalData()
+      getAllData()
+    } else if (!loading && !isAuthenticated) {
+      // If user is not authenticated, skip fetching
+      setIsLoading(false)
+    }
+  }, [isAuthenticated, loading])
 
   return (
-    <CaloriesContex.Provider 
-    value={{ 
-      calories, 
-      allCal,
-      setCalories, 
-      isLoading, 
-      refreshCal: getCalData, 
-      refreshAllCal: getAllData 
-    }}>
-      { children }
+    <CaloriesContex.Provider
+      value={{
+        calories,
+        allCal,
+        setCalories,
+        isLoading,
+        refreshCal: getCalData,
+        refreshAllCal: getAllData
+      }}>
+      {children}
     </CaloriesContex.Provider>
   )
 }
 
 export const useCalories = () => {
   const context = useContext(CaloriesContex)
-  if(!context) throw new Error("useCalories must be used within CaloriesProvider!")
-    return context
+  if (!context) throw new Error("useCalories must be used within CaloriesProvider!")
+  return context
 }

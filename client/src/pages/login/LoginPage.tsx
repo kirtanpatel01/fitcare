@@ -19,12 +19,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ModeToggle } from "@/components/mode-toggle"
 import api from "@/lib/api"
 import { toast } from "sonner"
 import { useAuth } from "@/context/AuthContext"
+import { useFitcareForm } from "@/hooks/use-fitcare-form"
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -35,6 +36,11 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
   const { login } = useAuth()
+
+  useEffect(() => {
+    useFitcareForm.getState().resetForm();
+  }, []);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,11 +54,12 @@ export default function LoginPage() {
     try {
       setIsLoading(true)
       const res = await api.post('/user/login', values)
-      if(res.status === 200) {
+      if (res.status === 200) {
         toast.success('Logged in successfully.')
         const token = res.data.accessToken
         login(token)
-        if(res.data.hasOnboarded) {
+        console.log(res.data)
+        if (res.data.user.hasOnboarded) {
           navigate('/dashboard')
         } else {
           navigate('/onboarding')
