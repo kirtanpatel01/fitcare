@@ -31,7 +31,6 @@ export default function TargetCal() {
 
   
   const { isLoading, calories, refreshCal } = useCalories();
-  console.log(isLoading, profileData)
   
   if(isLoading) return <div>Loading...</div>
   
