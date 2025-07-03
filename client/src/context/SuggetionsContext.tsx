@@ -92,8 +92,8 @@ export const SuggetionProvider = ({ children }: { children: React.ReactNode }) =
       }
     };
 
-    if(isAuthenticated) getAllSuggetions();
-  }, []);
+    if(isAuthenticated && !suggetions) getAllSuggetions();
+  }, [isAuthenticated, suggetions]);
 
   return (
     <SuggetionsContex.Provider value={{ suggetions, isLoading }}>
