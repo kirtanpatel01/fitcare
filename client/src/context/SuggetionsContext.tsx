@@ -72,7 +72,7 @@ export const SuggetionProvider = ({ children }: { children: React.ReactNode }) =
         const res = await api.get("/profile/suggetions");
         if (res.status === 200) {
           const fetched = res.data.parsed;
-          toast.success("Suggestions fetched from API.");
+          // toast.success("Suggestions fetched from API.");
 
           // Update state and cache
           setSuggetions(fetched);
