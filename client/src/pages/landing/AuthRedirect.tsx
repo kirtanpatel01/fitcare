@@ -8,13 +8,17 @@ function AuthRedirect() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (loading) return
-    if (isAuthenticated) {
-      navigate("/dashboard", { replace: true })
-    } else {
-      navigate("/login", { replace: true })
+    if (loading) return;
+
+    // Important: Only navigate if path is still "/"
+    if (window.location.pathname === '/') {
+      if (isAuthenticated) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/login", { replace: true });
+      }
     }
-  }, [isAuthenticated, loading, navigate])
+  }, [isAuthenticated, loading, navigate]);
 
   return <div className="text-center mt-10 text-lg">Redirecting...</div>
 }

@@ -42,11 +42,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const logout = () => {
-    removeToken()
-    setAccessToken(null)
-    setUser(null)
+    if (!accessToken && !user) return; // already logged out
+    removeToken();
+    setAccessToken(null);
+    setUser(null);
     useFitcareForm.getState().resetForm();
-  }
+  };
+
 
   const silentRefresh = async () => {
     try {
@@ -62,7 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       if (!accessToken) {
-        // setUser(null)
+        setUser(null)
         setLoading(false)
         return
       }
