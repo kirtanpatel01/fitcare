@@ -52,7 +52,7 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values)
+      // console.log(values)
       setIsLoading(true)
       const res = await api.post('/user/login', values)
       if (res.status === 200) {
@@ -60,10 +60,12 @@ export default function LoginPage() {
         console.log(res)
         const token = res.data.accessToken
         login(token)
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.user.hasOnboarded) {
+          console.log('dashboard')
           navigate('/dashboard')
         } else {
+          console.log('onboarding')
           navigate('/onboarding')
         }
       }
