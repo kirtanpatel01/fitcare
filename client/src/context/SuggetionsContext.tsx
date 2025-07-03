@@ -1,6 +1,7 @@
 import api from "@/lib/api";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "./AuthContext";
 
 interface Extra {
   bonus_tip: string;
@@ -43,6 +44,7 @@ const LOCAL_STORAGE_KEY = "fitcare-suggestions";
 export const SuggetionProvider = ({ children }: { children: React.ReactNode }) => {
   const [suggetions, setSuggetions] = useState<Suggetion | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     const getAllSuggetions = async () => {
@@ -90,7 +92,7 @@ export const SuggetionProvider = ({ children }: { children: React.ReactNode }) =
       }
     };
 
-    getAllSuggetions();
+    if(isAuthenticated) getAllSuggetions();
   }, []);
 
   return (
