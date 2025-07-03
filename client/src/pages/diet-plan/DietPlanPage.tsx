@@ -132,20 +132,21 @@ function DietPlanPage() {
   const quantityUnit = selectedFoods[0]?.qtyUnit || "g"
 
   return (
-    <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-[1fr_.25fr] gap-6">
-      <Link to={'/diet-plan/suggetions'} className="absolute top-18 right-6">
-        <Button>
+    <div className="p-4 sm:p-6 grid grid-cols-1 min-[880px]:grid-cols-[1fr_.25fr] gap-6">
+      <Link to={'/diet-plan/suggetions'} className="absolute top-16 sm:top-18 right-4 sm:right-6">
+        <Button className="">
           See Our AI Suggetions
         </Button>
       </Link>
       <div className="flex flex-col flex-1 gap-4">
         {/* Timing Buttons */}
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           {timings.map((time) => (
             <Button
               key={time}
               onClick={() => handleSelection(time)}
               variant={selectedTiming === time ? "default" : "outline"}
+              className="w-fit"
             >
               {time.charAt(0).toUpperCase() + time.slice(1)}
             </Button>
@@ -160,7 +161,7 @@ function DietPlanPage() {
             placeholder="Search the food..."
           />
 
-          <CommandList className="sm:h-[calc(100vh-13rem)] overflow-y-auto">
+          <CommandList className="px-2 h-96 min-[880px]:h-[calc(100vh-13rem)] overflow-y-auto">
             <CommandEmpty>
               {isLoading ? (
                 <div>Loading...</div>
@@ -195,7 +196,7 @@ function DietPlanPage() {
             </CommandEmpty>
 
             <CommandGroup>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 py-2">
+              <div className="grid min-[380px]:grid-cols-2 min-[480px]:grid-cols-3 min-[880px]:grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-6 py-2">
                 {foods.map((food) => (
                   <CommandItem
                     key={food.name}
@@ -227,7 +228,7 @@ function DietPlanPage() {
 
       {/* Selected Food Panel */}
       <div className="flex flex-col gap-6">
-        <Card className="h-fit gap-4 sm:gap-6 py-4 sm:py-6 mt-16">
+        <Card className="h-fit gap-4 sm:gap-6 py-4 sm:py-6 min-[880px]:mt-16">
           {editableFood ? (
             <>
               <CardHeader className="px-4 sm:px-6">
